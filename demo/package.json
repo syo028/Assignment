@@ -18,5 +18,9 @@
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@ionic/core": "^8.5.6",
+    "ionic": "^5.4.16"
   }
 }
