@@ -38,6 +38,8 @@ let itemCardTemplate = courseList.querySelector('.item-card')!
 itemCardTemplate.remove()
 
 
+
+
 let token =localStorage.getItem('token')
 
 async function loadItems() {
@@ -154,6 +156,40 @@ document.addEventListener('DOMContentLoaded', () => {
 loadItems()
 
 
+declare var usernameInput: HTMLInputElement
+declare var passwordInput: HTMLInputElement
+declare var loginButton: HTMLIonButtonElement
+declare var registerButton: HTMLIonButtonElement
 
+loginButton.addEventListener('click', async () => {
+  await handleAuth('login')
+})
 
+registerButton.addEventListener('click', async () => {
+  await handleAuth('signup')
+})
+
+async function handleAuth(mode: 'signup' | 'login') {
+  let username = usernameInput.value
+  let password = passwordInput.value
+
+  let res = await fetch(`${baseUrl}/auth/${mode}`, {
+    method: 'POST',
+    body: JSON.stringify({ username, password }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  let json = await res.json()
+  if (json.error) {
+    errorToast.message = json.error
+    errorToast.present()
+    return
+  }
+  errorToast.dismiss()
+  token = json.token
+  localStorage.setItem('token', json.token)
+  loginModal.dismiss()
+  // TODO load bookmarks
+}
 
