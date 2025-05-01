@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PYTHON教學</title>
+
+    <script 
+    type="module" 
+    src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js">
+  </script>
+    <script 
+    nomodule 
+    src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js">
+  </script>
+  <link 
+  rel="stylesheet" 
+  href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" />
+
+  <link rel="stylesheet" href="theme.css" />
+  <link rel="stylesheet" href="style.css" />
+  
+</head>
+
+<body>
+  <ion-app>
+    <ion-header>
+      <ion-toolbar color="primary">
+        <ion-title class="ion-text-center">程式教學</ion-title>
+        <ion-buttons slot="start">
+          <ion-button id="refreshButton">
+            <ion-icon name="refresh-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      
+        
+      </ion-toolbar>
+
+      <!--搜尋功能-->
+      <ion-searchbar
+        id="search-bar"
+        placeholder="搜尋..."
+      ></ion-searchbar>
+      <!--分類程度功能-->
+      <ion-toolbar>
+        <div class="filter-container">
+          <div class="filter-group">
+            <div class="filter-label">程度:</div>
+            <ion-select placeholder="選擇程度" id="level-select" interface="popover">
+              <ion-select-option value="">全部</ion-select-option>
+              <ion-select-option value="入門">入門</ion-select-option>
+              <ion-select-option value="中級">中級</ion-select-option>
+              <ion-select-option value="進階">進階</ion-select-option>
+            </ion-select>
+          </div>
+      <!--分類課程功能-->    
+          <div class="filter-group">
+            <div class="filter-label">課程:</div>
+            <ion-select placeholder="選擇課程" id="domain-select" interface="popover">
+              <ion-select-option value="">全部</ion-select-option>
+              <ion-select-option value="基礎">基礎程式設計</ion-select-option>
+              <ion-select-option value="數據">數據分析與處理</ion-select-option>
+              <ion-select-option value="網頁">網頁與API開發</ion-select-option>
+              <ion-select-option value="人工智能">人工智能與機器學習</ion-select-option>
+            </ion-select>
+          </div>
+      <!--refresh功能-->    
+      <ion-button size="small" id="reset-filters" fill="outline" class="reset-button">
+            <ion-icon name="refresh" size="small" slot="start"></ion-icon>
+            </ion-button>
+        </div>
+        
+        <div class="filter-chips">
+          <ion-chip outline id="all-filter" class="active-filter">
+            <ion-label >全部</ion-label>
+          </ion-chip>
+          <ion-chip outline id="basic-filter">
+            <ion-label>基礎語法</ion-label>
+          </ion-chip>
+          <ion-chip outline id="data-filter">
+            <ion-label>數據處理</ion-label>
+          </ion-chip>
+          <ion-chip outline id="web-filter">
+            <ion-label>網頁開發</ion-label>
+          </ion-chip>
+          <ion-chip outline id="ai-filter">
+            <ion-label>人工智能</ion-label>
+          </ion-chip>
+          <ion-chip outline id="testing-filter">
+            <ion-label>測試</ion-label>
+          </ion-chip>
+        </div>
+      </ion-toolbar>
+    </ion-header>
+    
+    <ion-content>
+      <ion-list id="courseList">
+        <ion-item class="skeleton-item">
+          <ion-thumbnail slot="start">
+            <ion-skeleton-text animated="true"></ion-skeleton-text>
+          </ion-thumbnail>
+          <ion-label>
+            <h3>
+              <ion-skeleton-text
+                animated="true"
+                style="width: 80%"
+              ></ion-skeleton-text>
+            </h3>
+            <p>
+              <ion-skeleton-text
+                animated="true"
+                style="width: 60%"
+              ></ion-skeleton-text>
+            </p>
+            <p>
+              <ion-skeleton-text
+                animated="true"
+                style="width: 30%"
+              ></ion-skeleton-text>
+            </p>
+          </ion-label>
+        </ion-item>
+
+      <ion-card class="item-card">
+        <ion-card style="width: 100%;">
+            <div class="video-thumbnail">
+              <img src= alt= class="course-image">
+              <div class="play-button" onclick="openVideoModal('${item.videoUrl}', '${item.title}')">
+                <ion-icon name="play" color="light" size="large"></ion-icon>
+              </div>
+              <div class="favorite-button">
+                <ion-icon name="heart-outline"></ion-icon>
+              </div>
+            </div>
+            </ion-card>
+            <ion-card-content>
+              <div class="course-details">
+                <div class="course-title"></div>
+                <div class="course-meta">
+                  <span>程式語言: </span>
+                  <span>程度: </span>
+                </div>
+                <div class="course-description"></div>
+                
+                <div class="tag-container">
+                   <ion-chip class="tag"color="primary" data type="sample-tag">
+                              sample-tag-name</ion-chip>                  
+                </div>
+              </div>
+            </ion-card-content>
+
+          </ion-list>
+
+
+ 
+      <div class="pagination-container">
+        <ion-button id="prevPageButton" expand="block" hidden>
+          上一頁
+        </ion-button>
+        <ion-button id="nextPageButton" expand="block" hidden>
+          下一頁
+        </ion-button>
+      </div>
+
+
+      <ion-modal id="loginModal">
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>登入</ion-title>
+            <ion-buttons slot="end">
+              <ion-button onclick="loginModal.dismiss()">
+                <ion-icon name="close-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content>
+          <ion-list>
+            <ion-input
+              id="usernameInput"
+              type="text"
+              label="帳號"
+            ></ion-input>
+            <ion-input
+              id="passwordInput"
+              type="password"
+              label="密碼"
+            ></ion-input>
+            <ion-button expand="block" id="loginButton">登入</ion-button>
+            <ion-button expand="block" id="registerButton">註冊</ion-button>
+          </ion-list>
+        </ion-content>
+      </ion-modal>
+
+      <ion-toast id="errorToast" duration="5000" color="danger"></ion-toast>
+
+    </ion-content>
+  </ion-app>
+
+  <ion-toast id="error-toast"></ion-toast>
+
+  <script src="bundle.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,315 @@
+# Visualize on https://erd.surge.sh
+# or https://quick-erd.surge.sh
+#
+# Relationship Types
+#  -    - one to one
+#  -<   - one to many
+#  >-   - many to one
+#  >-<  - many to many
+#  -0   - one to zero or one
+#  0-   - zero or one to one
+#  0-0  - zero or one to zero or one
+#  -0<  - one to zero or many
+#  >0-  - zero or many to one
+#
+////////////////////////////////////
+
+
+user
+----
+id integer PK
+username varchar(32)
+password_hash varchar(72)
+
+
+session
+-------
+id integer PK
+user_id integer FK >0- user.id
+token text unique
+
+
+url
+---
+id integer PK
+url text unique
+
+
+method
+------
+id integer PK
+method text unique
+
+
+user_agent
+----------
+id integer PK
+user_agent text unique
+
+
+request_log
+-----------
+id integer PK
+method_id integer FK >- method.id
+url_id integer FK >- url.id
+user_id integer NULL FK >- user.id
+user_agent_id integer NULL FK >- user_agent.id
+timestamp integer
+
+
+item
+----
+id integer PK
+title text
+description text
+category text
+image_url text
+video_url text
+published_at timestamp
+
+
+item_tag
+--------
+id integer PK
+item_id integer FK >0- item.id
+tag_id integer FK >0- tag.id
+
+
+tag
+---
+id integer PK
+name text
+
+
+course
+------
+id integer PK
+item_id integer FK >0- item.id
+language text
+level enum('beginner','intermediate','advanced')
+duration_minutes integer
+instructor text
+
+
+course_prerequisite
+-------------------
+id integer PK
+course_id integer FK >0- course.id
+prerequisite text
+
+
+exercise
+--------
+id integer PK FK >0- item.id
+difficulty enum('easy','medium','hard')
+duration_minutes integer
+calories integer
+
+
+exercise_muscle
+---------------
+id integer PK
+exercise_id integer FK >0- exercise.id
+muscle text
+
+
+exercise_equipment
+------------------
+id integer PK
+exercise_id integer FK >0- exercise.id
+equipment text
+
+
+yoga_pose
+---------
+id integer PK FK >0- item.id
+sanskrit_name text
+difficulty enum('beginner','intermediate','advanced')
+duration_minutes integer
+instructor text
+
+
+yoga_benefit
+------------
+id integer PK
+pose_id integer FK >0- yoga_pose.id
+benefit text
+
+
+software
+--------
+id integer PK FK >0- item.id
+license text
+github_url text
+
+
+software_language
+-----------------
+id integer PK
+software_id integer FK >0- software.id
+language text
+
+
+hardware
+--------
+id integer PK FK >0- item.id
+license text
+schematic_url text
+manufacturer text
+
+
+hardware_component
+------------------
+id integer PK
+hardware_id integer FK >0- hardware.id
+component text
+
+
+font
+----
+id integer PK FK >0- item.id
+designer text
+file_format enum('TTF','OTF','WOFF','WOFF2')
+download_url text
+
+
+font_style
+----------
+id integer PK
+font_id integer FK >0- font.id
+style text
+
+
+font_language
+-------------
+id integer PK
+font_id integer FK >0- font.id
+language text
+
+
+classical_music
+---------------
+id integer PK FK >0- item.id
+composer text
+period text
+duration_minutes integer
+
+
+music_movement
+--------------
+id integer PK
+music_id integer FK >0- classical_music.id
+movement text
+
+
+music_instrument
+----------------
+id integer PK
+music_id integer FK >0- classical_music.id
+instrument text
+
+
+wiki_entry
+----------
+id integer PK FK >0- item.id
+last_editor text
+last_edit_date text
+views integer
+
+
+wiki_language
+-------------
+id integer PK
+entry_id integer FK >0- wiki_entry.id
+language text
+
+
+wiki_reference
+--------------
+id integer PK
+entry_id integer FK >0- wiki_entry.id
+reference text
+
+
+attraction
+----------
+id integer PK FK >0- item.id
+address text
+city text
+country text
+opening_hours text
+
+
+attraction_facility
+-------------------
+id integer PK
+attraction_id integer FK >0- attraction.id
+facility text
+
+
+pet_breed
+---------
+id integer PK FK >0- item.id
+species text
+origin text
+lifespan text
+size enum('small','medium','large')
+
+
+breed_temperament
+-----------------
+id integer PK
+breed_id integer FK >0- pet_breed.id
+temperament text
+
+
+bookmark
+--------
+id integer PK
+user_id integer FK >- user.id
+item_id integer FK >- item.id
+created_at timestamp
+
+
+# zoom: 1.000
+# view: (-10, -349)
+# text-bg: #6495ed
+# text-color: #000000
+# diagram-bg: #f5f5f5
+# diagram-text: #000000
+# table-bg: #ffffff
+# table-text: #000000
+# user (612, -49)
+# session (305, -204)
+# url (1463, -284)
+# method (1467, -408)
+# user_agent (1462, -165)
+# request_log (1026, -292)
+# item (605, 202)
+# item_tag (316, 111)
+# tag (36, 117)
+# course (908, 471)
+# course_prerequisite (1234, 471)
+# exercise (907, 721)
+# exercise_muscle (1243, 675)
+# exercise_equipment (1249, 821)
+# yoga_pose (245, 471)
+# yoga_benefit (-3, 471)
+# software (907, 971)
+# software_language (1247, 971)
+# hardware (913, 1218)
+# hardware_component (1265, 1203)
+# font (273, 747)
+# font_style (-5, 700)
+# font_language (-16, 848)
+# classical_music (911, 1468)
+# music_movement (1285, 1371)
+# music_instrument (1286, 1533)
+# wiki_entry (256, 1029)
+# wiki_language (-20, 1003)
+# wiki_reference (-16, 1138)
+# attraction (269, 1288)
+# attraction_facility (-76, 1314)
+# pet_breed (312, 1583)
+# breed_temperament (-6, 1594)
+# bookmark (1005, 84)

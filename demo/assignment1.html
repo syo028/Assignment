@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PYTHON教學</title>
+
+    <script 
+    type="module" 
+    src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js">
+  </script>
+    <script 
+    nomodule 
+    src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js">
+  </script>
+  <link 
+  rel="stylesheet" 
+  href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" />
+
+  <link rel="stylesheet" href="theme.css" />
+  <link rel="stylesheet" href="style.css" />
+  
+  <!-- 移除了多餘的 </style> 標籤 -->
+</head>
+
+<body>
+  <ion-app>
+    <ion-header>
+      <ion-toolbar color="primary">
+        <ion-title class="ion-text-center">Python 課程教學</ion-title>
+        <a href="index.html" class="icon-link">
+          <ion-icon name="arrow-back-circle-outline"></ion-icon>
+      </a>
+        
+      </ion-toolbar>
+
+      <!--搜尋功能-->
+      <ion-searchbar
+        id="search-bar"
+        placeholder="搜尋..."
+      ></ion-searchbar>
+      <!--分類程度功能-->
+      <ion-toolbar>
+        <div class="filter-container">
+          <div class="filter-group">
+            <div class="filter-label">程度:</div>
+            <ion-select placeholder="選擇程度" id="level-select" interface="popover">
+              <ion-select-option value="">全部</ion-select-option>
+              <ion-select-option value="入門">入門</ion-select-option>
+              <ion-select-option value="中級">中級</ion-select-option>
+              <ion-select-option value="進階">進階</ion-select-option>
+            </ion-select>
+          </div>
+      <!--分類課程功能-->    
+          <div class="filter-group">
+            <div class="filter-label">課程:</div>
+            <ion-select placeholder="選擇課程" id="domain-select" interface="popover">
+              <ion-select-option value="">全部</ion-select-option>
+              <ion-select-option value="基礎">基礎程式設計</ion-select-option>
+              <ion-select-option value="數據">數據分析與處理</ion-select-option>
+              <ion-select-option value="網頁">網頁與API開發</ion-select-option>
+              <ion-select-option value="人工智能">人工智能與機器學習</ion-select-option>
+            </ion-select>
+          </div>
+      <!--refresh功能-->    
+      <ion-button size="small" id="reset-filters" fill="outline" class="reset-button">
+            <ion-icon name="refresh" size="small" slot="start"></ion-icon>
+            </ion-button>
+        </div>
+        
+        <div class="filter-chips">
+          <ion-chip outline id="all-filter" class="active-filter">
+            <ion-label >全部</ion-label>
+          </ion-chip>
+          <ion-chip outline id="basic-filter">
+            <ion-label>基礎語法</ion-label>
+          </ion-chip>
+          <ion-chip outline id="data-filter">
+            <ion-label>數據處理</ion-label>
+          </ion-chip>
+          <ion-chip outline id="web-filter">
+            <ion-label>網頁開發</ion-label>
+          </ion-chip>
+          <ion-chip outline id="ai-filter">
+            <ion-label>人工智能</ion-label>
+          </ion-chip>
+          <ion-chip outline id="testing-filter">
+            <ion-label>測試</ion-label>
+          </ion-chip>
+        </div>
+      </ion-toolbar>
+    </ion-header>
+    
+    <ion-content>
+      <ion-list id="course-list">
+        <!-- 課程項目將由 JavaScript 動態生成 -->
+      </ion-list>
+    </ion-content>
+    
+    <!-- 影片播放 Modal -->
+    <ion-modal id="video-modal">
+      <ion-header>
+        <ion-toolbar>
+          <ion-title id="video-title">影片播放</ion-title>
+          <ion-buttons slot="end">
+            <ion-button id="close-modal">關閉</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <div id="video-container" class="ion-padding">
+          <!-- 影片將在這裡顯示 -->
+        </div>
+      </ion-content>
+    </ion-modal>
+  </ion-app>
+  
+  <script>
+    // 課程資料
+    const courseItems = [
+      {
+        id: 1,
+        title: "Python 基礎",
+        level: "入門",
+        domain: "基礎",
+        description: "介紹python基本知識，輸出、變數、數字的四則運算、輸入的用法。",
+        tags: ["基礎語法", "數據類型", "操作符"],
+        imageUrl: "src/Pic-01.png",
+        videoUrl: "https://www.youtube.com/embed/cJ_yQb5rmR8?si=BBKewo2LCCpTYQAr"
+      },
+      {
+        id: 2,
+        title: "控制結構",
+        level: "入門",
+        domain: "基礎",
+        description: "介紹python基本知識，資料型態、bool, list, 型態轉換、if表達式、for迴圈處理、while迴圈處理的用法。",
+        tags: ["基礎語法", "if,elif,else 語句", "for 迴圈", "while 迴圈","book"],
+        imageUrl: "src/Pic-02.png",
+        videoUrl: "https://www.youtube.com/embed/winKwQwqt5c?si=YhpPNxrWa9ySD7kT"
+      },
+      {
+        id: 3,
+        title: "函數和模組",
+        level: "入門",
+        domain: "基礎",
+        description: "了解如何定義和調用函數，並學習如何使用和創建模組來提高程式的可重用性。",
+        tags: ["基礎語法", "函數定義", "模組導入", "代碼重用"],
+        imageUrl: "src/Pic-03.png",
+        videoUrl: "https://www.youtube.com/embed/FzLjrHDjAz4?si=2dW_Y53gMPOjF5zH"
+      },
+      {
+        id: 4,
+        title: "資料結構",
+        level: "中級",
+        domain: "基礎",
+        description: "深入學習 Python 的資料結構，包括列表、元組、集合和字典的使用。",
+        tags: ["基礎語法", "列表", "元組", "集合", "字典"],
+        imageUrl: "src/Pic-04.png",
+        videoUrl: "https://www.youtube.com/embed/3-pVZTczaBA?si=skx8sSIbQQEb78zp"
+      },
+      {
+        id: 5,
+        title: "文件操作",
+        level: "中級",
+        domain: "基礎",
+        description: "學習如何讀取、寫入和處理文件，以管理資料和持久化數據。",
+        tags: ["數據處理", "文件讀取", "文件寫入", "數據持久化"],
+        imageUrl: "src/Pic-05.png",
+        videoUrl: "https://www.youtube.com/embed/uYkGAg9iBmo?si=2GZWFkG9JXelKkrc"
+      },
+      {
+        id: 6,
+        title: "錯誤和異常處理",
+        level: "中級",
+        domain: "基礎",
+        description: "介紹如何使用 try-except 語句來捕捉和處理異常，以提高程式的穩定性。",
+        tags: ["測試與調試", "try-except", "異常捕捉", "錯誤處理"],
+        imageUrl: "src/Pic-06.png",
+        videoUrl: "https://www.youtube.com/embed/hpQz-0q5uGY?si=QWavOc4iKWpmH-ql"
+      },
+      {
+        id: 7,
+        title: "物件導向編程",
+        level: "中級",
+        domain: "基礎",
+        description: "理解物件導向編程的核心概念，包括類和對象、繼承和多態。",
+        tags: ["基礎語法", "類和對象", "繼承", "多態", "封裝"],
+        imageUrl: "src/Pic-07.png",
+        videoUrl: "https://www.youtube.com/embed/LQZLeYQEzkM?si=5JTvdCmnd0i1hA9Q"
+      },
+      {
+        id: 8,
+        title: "標準庫和第三方庫",
+        level: "中級",
+        domain: "基礎",
+        description: "學習如何使用 Python 標準庫以及安裝和使用第三方庫來擴展應用功能。",
+        tags: ["基礎語法", "標準庫", "pip", "第三方庫", "套件管理"],
+        imageUrl: "src/Pic-08.png",
+        videoUrl: "https://www.youtube.com/embed/2oCFSBlJ-PA?si=RqayK_a8GG46jrM3"
+      },
+      {
+        id: 9,
+        title: "正則表達式",
+        level: "中級",
+        domain: "數據",
+        description: "掌握正則表達式的使用，以便進行模式匹配和文本處理。",
+        tags: ["數據處理", "模式匹配", "文本處理", "re 模組"],
+        imageUrl: "src/Pic-09.png",
+        videoUrl: "https://www.youtube.com/embed/CpW8sLapu1g?si=jwpev0S6vSB2gPQ3"
+      },
+      {
+        id: 10,
+        title: "網絡編程",
+        level: "中級",
+        domain: "網頁",
+        description: "介紹如何利用 Python 進行網絡請求、REST API 操作和數據抓取。",
+        tags: ["網頁開發", "HTTP 請求", "REST API", "requests 庫"],
+        imageUrl: "src/Pic-10.png",
+        videoUrl: "https://www.youtube.com/embed/sUzR3QVBKIo?si=gnq5d6fZDmo8_jZ4"
+      },
+      {
+        id: 11,
+        title: "數據分析基礎",
+        level: "中級",
+        domain: "數據",
+        description: "使用 Pandas 進行數據處理、分析及處理大數據的基礎。",
+        tags: ["數據處理", "Pandas", "數據分析"],
+        imageUrl: "src/Pic-11.png",
+        videoUrl: "https://www.youtube.com/embed/UCeeS95GatA?si=WS2qkz3fmeQDWXEX"
+      },
+      {
+        id: 12,
+        title: "數據可視化",
+        level: "中級",
+        domain: "數據",
+        description: "學習如何使用 Matplotlib 和 Seaborn 進行數據可視化，幫助理解數據。",
+        tags: ["數據處理", "Matplotlib", "Seaborn", "圖表繪製"],
+        imageUrl: "src/Pic-12.png",
+        videoUrl: "https://www.youtube.com/embed/a9UrKTVEeZA?si=G_SXoNay00P0_nZr"
+      },
+      {
+        id: 13,
+        title: "Web 開發基礎",
+        level: "中級",
+        domain: "網頁",
+        description: "使用 Flask 或 Django 框架建立簡單的 web 應用程序，了解後端開發。",
+        tags: ["網頁開發", "Flask", "Django", "後端開發"],
+        imageUrl: "src/Pic-13.png",
+        videoUrl: "https://www.youtube.com/embed/Z1RJmh_OqeA?si=Aw53cHRq1_ZFatBp"
+      },
+      {
+        id: 14,
+        title: "測試和調試",
+        level: "中級",
+        domain: "基礎",
+        description: "學習如何使用單元測試和調試工具，保證代碼質量和可靠性。",
+        tags: ["測試與調試", "單元測試", "unittest", "調試技巧"],
+        imageUrl: "src/Pic-14.png",
+        videoUrl: "https://www.youtube.com/embed/s83zs3wLOEo?si=Vt1dCesLnYMfRn8F"
+      },
+      {
+        id: 15,
+        title: "API 開發",
+        level: "進階",
+        domain: "網頁",
+        description: "學習如何使用 Flask-Restful 開發 RESTful API，並與前端交互。",
+        tags: ["網頁開發", "RESTful API", "Flask-RESTful"],
+        imageUrl: "src/Pic-15.png",
+        videoUrl: "https://www.youtube.com/embed/KjQXByQLMyE?si=uQ1XCxC6LH7LmgJo"
+      },
+      {
+        id: 16,
+        title: "機器學習基礎",
+        level: "進階",
+        domain: "人工智能",
+        description: "全面理解機器學習的原理，利用機器學習作分析、預測，並使用pytorch搭建模型。",
+        tags: ["人工智能", "pytorch", "模型訓練", "預測分析"],
+        imageUrl: "src/Pic-16.png",
+        videoUrl: "https://www.youtube.com/embed/wm9yR1VspPs?si=eUlKfWqBjx3ga7Ma"
+      },
+      {
+        id: 17,
+        title: "自然語言處理",
+        level: "進階",
+        domain: "人工智能",
+        description: "處理真實數據時可能遇到的挑戰和解決方案。透過這個影片，您將獲得對NLP專案的全面理解，並掌握建立有效NLP應用的基本技能。",
+        tags: ["人工智能", "NLTK", "SpaCy", "文本分析"],
+        imageUrl: "src/Pic-17.png",
+        videoUrl: "https://www.youtube.com/embed/h2kBNEShsiE?si=IG1OjLUsa5yJwY2m"
+      },
+      {
+        id: 18,
+        title: "電腦應用程式開發",
+        level: "中級",
+        domain: "中級",
+        description: "使用 Tkinter 開發簡單的桌面應用程序，掌握 GUI 編程基礎。",
+        tags: ["基礎語法", "Tkinter", "GUI 編程", "桌面應用"],
+        imageUrl: "src/Pic-18.png",
+        videoUrl: "https://www.youtube.com/embed/IXQWVM46-zg?si=tNyIPVTADvw-nTgT"
+      },
+      {
+        id: 19,
+        title: "爬蟲技術",
+        level: "中級",
+        domain: "數據",
+        description: "學習使用Scrapy 進行網頁爬蟲，提取網頁數據。",
+        tags: ["數據處理",  "Scrapy", "網頁數據提取"],
+        imageUrl: "src/Pic-19.png",
+        videoUrl: "https://www.youtube.com/embed/u-1PURwCMxE?si=Ta2-2W1ML_-vp8Hf"
+      },
+      {
+        id: 20,
+        title: "數據庫操作",
+        level: "中級",
+        domain: "數據",
+        description: "使用 SQL、MySQL 和資料庫管理相關的基本概念和實用技能。",
+        tags: ["數據處理", "SQLite", "SQLAlchemy", "CRUD 操作"],
+        imageUrl: "src/Pic-20.png",
+        videoUrl: "https://www.youtube.com/embed/gvRXjsrpCHw?si=wxSDfItoSpG8oPld"
+      }
+    ];
+
+     // 獲取 DOM 元素
+    const videoModal = document.querySelector('#video-modal');
+    const videoTitle = document.querySelector('#video-title');
+    const videoContainer = document.querySelector('#video-container');
+    const closeModalBtn = document.querySelector('#close-modal');
+    const searchBar = document.querySelector('#search-bar');
+    const levelSelect = document.querySelector('#level-select');
+    const domainSelect = document.querySelector('#domain-select');
+    const resetFiltersBtn = document.querySelector('#reset-filters');
+    const courseList = document.querySelector('#course-list');
+    
+    // 篩選器元素
+    const allFilter = document.querySelector('#all-filter');
+    const basicFilter = document.querySelector('#basic-filter');
+    const dataFilter = document.querySelector('#data-filter');
+    const webFilter = document.querySelector('#web-filter');
+    const aiFilter = document.querySelector('#ai-filter');
+    const testingFilter = document.querySelector('#testing-filter');
+    
+    // 當前篩選條件
+    let currentFilters = {
+      searchTerm: '',
+      level: '',
+      domain: '',
+      tag: ''
+    };
+    
+    // 從 localStorage 獲取收藏課程
+    function getFavoriteCourses() {
+      return JSON.parse(localStorage.getItem('favoriteCourses')) || [];
+    }
+    
+    // 檢查課程是否已收藏
+    function isFavorite(courseId) {
+      const favorites = getFavoriteCourses();
+      return favorites.some(course => course.id === courseId);
+    }
+    
+    // 添加課程到收藏
+    function addToFavorites(course) {
+      let favorites = getFavoriteCourses();
+      
+      // 檢查是否已經收藏
+      if (!favorites.some(item => item.id === course.id)) {
+        favorites.push(course);
+        localStorage.setItem('favoriteCourses', JSON.stringify(favorites));
+        
+        // 顯示成功提示
+        showToast('課程已加入收藏');
+        return true;
+      }
+      return false;
+    }
+    
+    // 從收藏中移除課程
+    function removeFromFavorites(courseId) {
+      let favorites = getFavoriteCourses();
+      const newFavorites = favorites.filter(course => course.id !== courseId);
+      
+      if (newFavorites.length !== favorites.length) {
+        localStorage.setItem('favoriteCourses', JSON.stringify(newFavorites));
+        
+        // 顯示移除提示
+        showToast('課程已從收藏中移除');
+        return true;
+      }
+      return false;
+    }
+    
+    // 顯示提示訊息
+    function showToast(message) {
+      const toast = document.createElement('ion-toast');
+      toast.message = message;
+      toast.duration = 2000;
+      toast.position = 'bottom';
+      document.body.appendChild(toast);
+      toast.present();
+    }
+    
+    // 切換收藏狀態
+    function toggleFavorite(event, course) {
+      event.stopPropagation(); // 防止觸發其他點擊事件
+      
+      const button = event.currentTarget;
+      const isFav = button.classList.contains('active');
+      
+      if (isFav) {
+        if (removeFromFavorites(course.id)) {
+          button.classList.remove('active');
+          button.querySelector('ion-icon').setAttribute('name', 'heart-outline');
+        }
+      } else {
+        if (addToFavorites(course)) {
+          button.classList.add('active');
+          button.querySelector('ion-icon').setAttribute('name', 'heart');
+        }
+      }
+    }
+    
+    // 更新課程列表顯示
+    function updateList() {
+      courseList.innerHTML = ''; // 清空現有列表
+      
+      // 獲取篩選條件
+      const searchTerm = currentFilters.searchTerm.toLowerCase();
+      const selectedLevel = currentFilters.level;
+      const selectedDomain = currentFilters.domain;
+      const selectedTag = currentFilters.tag;
+      
+      // 篩選課程
+      let filteredCourses = courseItems.filter(item => {
+      
+        // 搜尋條件
+        const matchesSearch = searchTerm === '' || 
+         item.title.toLowerCase().includes(searchTerm) || 
+         item.description.toLowerCase().includes(searchTerm);
+        
+        // 程度篩選
+        const matchesLevel = selectedLevel === '' || item.level.includes(selectedLevel);
+        
+        // 課程篩選
+        const matchesDomain = selectedDomain === '' || item.domain === selectedDomain;
+        
+        // 標籤篩選
+        const matchesTag = selectedTag === '' || item.tags.includes(selectedTag);
+        
+        return matchesSearch && matchesLevel && matchesDomain && matchesTag;
+      });
+      
+      // 篩選後的課程
+      if (filteredCourses.length > 0) {
+        filteredCourses.forEach(item => {
+          const listItem = document.createElement('ion-item');
+          const isFav = isFavorite(item.id);
+          
+          listItem.innerHTML = `
+            <ion-card style="width: 100%;">
+              <div class="video-thumbnail">
+                <img src="${item.imageUrl}" alt="${item.title}" class="course-image">
+                <div class="play-button" onclick="openVideoModal('${item.videoUrl}', '${item.title}')">
+                  <ion-icon name="play" color="light" size="large"></ion-icon>
+                </div>
+                <div class="favorite-button ${isFav ? 'active' : ''}" id="fav-btn-${item.id}">
+                  <ion-icon name="${isFav ? 'heart' : 'heart-outline'}"></ion-icon>
+                </div>
+              </div>
+              <ion-card-content>
+                <div class="course-details">
+                  <div class="course-title">${item.title}</div>
+                  <div class="course-meta">
+                    <span>程式語言: Python 3.x</span>
+                    <span>程度: ${item.level}</span>
+                  </div>
+                  <div class="course-description">
+                    ${item.description}
+                  </div>
+                  <div class="tag-container">
+                    ${item.tags.map(tag => 
+                      `<ion-chip color="${tag === selectedTag ? 'primary' : 'medium'}" 
+                                outline="${tag !== selectedTag}" 
+                                class="${tag === selectedTag ? 'active-filter' : ''}"
+                                onclick="filterByTag('${tag}')">${tag}</ion-chip>`
+                    ).join('')}
+                  </div>
+                </div>
+              </ion-card-content>
+            </ion-card>
+          `;
+          
+          courseList.appendChild(listItem);
+          
+          // 添加收藏按鈕事件監聽
+          const favBtn = document.getElementById(`fav-btn-${item.id}`);
+          favBtn.addEventListener('click', (event) => toggleFavorite(event, item));
+        });
+      } else {
+        // 沒有匹配的課程，顯示空狀態
+        const emptyState = document.createElement('div');
+        emptyState.className = 'empty-state';
+        emptyState.innerHTML = `
+          <ion-icon name="search-outline"></ion-icon>
+          <h2>沒有找到符合條件的課程</h2>
+          <p>請嘗試調整搜尋條件或分類篩選</p>
+          <ion-button color="primary" onclick="resetAllFilters()">
+            <ion-icon name="refresh" slot="end"></ion-icon>
+            重設所有篩選
+          </ion-button>
+        `;
+        courseList.appendChild(emptyState);
+      }
+      
+      // 更新篩選器 UI
+      updateFilterUI();
+    }
+    
+    // 更新篩選器 UI
+    function updateFilterUI() {
+      // 更新標籤篩選器
+      const allChips = document.querySelectorAll('.filter-chips ion-chip');
+      allChips.forEach(chip => {
+        chip.classList.remove('active-filter');
+      });
+      
+      if (currentFilters.tag === '') {
+        allFilter.classList.add('active-filter');
+      } else {
+        switch(currentFilters.tag) {
+          case '基礎語法':
+            basicFilter.classList.add('active-filter');
+            break;
+          case '數據處理':
+            dataFilter.classList.add('active-filter');
+            break;
+          case '網頁開發':
+            webFilter.classList.add('active-filter');
+            break;
+          case '人工智能':
+            aiFilter.classList.add('active-filter');
+            break;
+          case '測試與調試':
+            testingFilter.classList.add('active-filter');
+            break;
+        }
+      }
+    }
+    
+    // 按標籤篩選
+    function filterByTag(tag) {
+      if (currentFilters.tag === tag) {
+        // 如果點擊的是當前已選標籤，則取消篩選
+        currentFilters.tag = '';
+      } else {
+        currentFilters.tag = tag;
+      }
+      updateList();
+    }
+    
+    // 重設所有篩選
+    function resetAllFilters() {
+      currentFilters = {
+        searchTerm: '',
+        level: '',
+        domain: '',
+        tag: ''
+      };
+      
+      // 重設 UI 元素
+      searchBar.value = '';
+      levelSelect.value = '';
+      domainSelect.value = '';
+      
+      updateList();
+    }
+    
+    // 打開影片 Modal
+    function openVideoModal(videoUrl, title) {
+      videoTitle.textContent = title + ' - 影片播放';
+      videoContainer.innerHTML = `
+        <iframe class="modal-video" src="${videoUrl}" 
+          frameborder="0" allowfullscreen></iframe>
+      `;
+      videoModal.present();
+    }
+    
+    // 關閉 Modal 時清空影片
+    closeModalBtn.addEventListener('click', () => {
+      videoModal.dismiss();
+      // 清空影片容器，避免影片繼續播放
+      videoContainer.innerHTML = '';
+    });
+    
+    // Listen - 搜尋輸入
+    searchBar.addEventListener('ionInput', (event) => {
+      currentFilters.searchTerm = event.target.value || '';
+      updateList();
+    });
+    
+    // Listen - 程度選擇
+    levelSelect.addEventListener('ionChange', (event) => {
+      currentFilters.level = event.detail.value || '';
+      updateList();
+    });
+    
+    // Listen - 課程選擇
+    domainSelect.addEventListener('ionChange', (event) => {
+      currentFilters.domain = event.detail.value || '';
+      updateList();
+    });
+    
+    // Listen - refresh button
+    resetFiltersBtn.addEventListener('click', resetAllFilters);
+    
+    // Listen - filter button
+    allFilter.addEventListener('click', () => {
+      currentFilters.tag = '';
+      updateList();
+    });
+    
+    basicFilter.addEventListener('click', () => filterByTag('基礎語法'));
+    dataFilter.addEventListener('click', () => filterByTag('數據處理'));
+    webFilter.addEventListener('click', () => filterByTag('網頁開發'));
+    aiFilter.addEventListener('click', () => filterByTag('人工智能'));
+    testingFilter.addEventListener('click', () => filterByTag('測試與調試'));
+    
+    // 將函數暴露到全局作用域
+    window.openVideoModal = openVideoModal;
+    window.filterByTag = filterByTag;
+    window.resetAllFilters = resetAllFilters;
+    
+    // 初始化，顯示所有課程
+    document.addEventListener('DOMContentLoaded', () => {
+      updateList();
+    });
+  </script>
+
+</body>
+</html>
