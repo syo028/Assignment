@@ -93,6 +93,7 @@ type Item = {
 let items = json.items as Item[]
 console.log('items:',items)
 
+let bookmarkedItemIds = await autoRetryGetBookmarks()
 courseList.textContent = ''
 for(let item of items){
 
@@ -106,9 +107,9 @@ card.querySelector('.play-button')!.setAttribute('onclick', `openVideoModal('${i
 
 let favoriteButton = card.querySelector('.favorite-button')!
 let favoriteIcon = favoriteButton.querySelector('ion-icon')!
-let hasBookmarked = false
-favoriteIcon.name = hasBookmarked ? 'heart' : 'heart-outline'
-favoriteButton.addEventListener('click', () => {
+favoriteIcon.name = bookmarkedItemIds.includes(item.id)
+ ? 'heart' : 'heart-outline'
+favoriteButton.addEventListener('click', async() => {
 
   if (!token) {
     errorToast.setAttribute('message','請先登入以使用收藏功能')
@@ -116,12 +117,15 @@ favoriteButton.addEventListener('click', () => {
     errorToast.present?.()
     return
   }
+try {
+  await bookmarkItem(item.id)
+  favoriteIcon.name = 'heart'
+  errorToast.dismiss()
+} catch (error) {
+  errorToast.message = String(error)
+  errorToast.present()
+}
 
-
-
-  hasBookmarked = !hasBookmarked
-  favoriteIcon.name = hasBookmarked ? 'heart' : 'heart-outline'
-  //TODO: 實作收藏功能  
 })
 
   card.querySelector('.course-title')!.textContent = item.title
@@ -194,9 +198,7 @@ async function handleAuth(mode: 'signup' | 'login') {
 }
 
 //Bookmarks Function
-export async function bookmarkItem (item_id: number,icon:HTMLIonIconElement
-  try{
-    //TODO call API
+export async function bookmarkItem (item_id: number){
   let res = await fetch(`${baseUrl}/bookmarks/${item_id}`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${token}` },
@@ -205,19 +207,9 @@ export async function bookmarkItem (item_id: number,icon:HTMLIonIconElement
   if (json.error) {
     throw json.error
   }
-  icon.name = 'heart'
-} catch (error) {
-  errorToast.message = String(error)
-  errorToast.present()
 }
-  try {
-   //TODO call API
-   throw 'TODO:call server API'
-} catch (error) {
-  errorToast.message = String(error)
-  errorToast.present()
-}
-export async function unbookmarkItem (item_id: number) {
+
+export async function unbookmarkItem (item_id: number, icon:HTMLIonIconElement) {
   try {
     //TODO call API
     throw 'TODO:call server API'
@@ -227,11 +219,25 @@ export async function unbookmarkItem (item_id: number) {
  }
  }
 export async function getBookmarks () {
-  try {
-    //TODO call API
-    throw 'TODO:call server API'
- } catch (error) {
-   errorToast.message = String(error)
-   errorToast.present()
- }
- }
+  let res = await fetch(`${baseUrl}/bookmarks`, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+  let json = await res json()
+  if (json.error) {
+    throw json.error
+  }
+return json.item_ids as number[]
+}
+
+async function autoRetryGetBookmarks() {
+  let error = null
+  for (let i = 0; i < 3; i++) {
+    try {
+      let itemIds = await getBookmarks()
+      return itemIds
+    } catch (err) {
+      error = err
+    }
+  }
+  throw error
+}
