@@ -118,9 +118,15 @@ favoriteButton.addEventListener('click', async() => {
     return
   }
 try {
-  await bookmarkItem(item.id)
-  favoriteIcon.name = 'heart'
-  errorToast.dismiss()
+  if (favoriteIcon.name === 'heart') {
+    // Item is already bookmarked, remove it
+    await unBookmarkItem(item.id, favoriteIcon)
+  } else {
+    // Item is not bookmarked, add it
+    await bookmarkItem(item.id)
+    favoriteIcon.name = 'heart'
+    errorToast.dismiss()
+  }
 } catch (error) {
   errorToast.message = String(error)
   errorToast.present()
@@ -198,7 +204,7 @@ async function handleAuth(mode: 'signup' | 'login') {
 }
 
 //Bookmarks Function
-export async function bookmarkItem (item_id: number){
+async function bookmarkItem (item_id: number){
   let res = await fetch(`${baseUrl}/bookmarks/${item_id}`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${token}` },
@@ -209,20 +215,29 @@ export async function bookmarkItem (item_id: number){
   }
 }
 
-export async function unbookmarkItem (item_id: number, icon:HTMLIonIconElement) {
+async function unBookmarkItem(item_id: number, icon: HTMLIonIconElement) {
   try {
-    //TODO call API
-    throw 'TODO:call server API'
- } catch (error) {
-   errorToast.message = String(error)
-   errorToast.present()
- }
- }
-export async function getBookmarks () {
+    let res = await fetch(`${baseUrl}/bookmarks/${item_id}`, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    let json = await res.json()
+    if (json.error) {
+      throw json.error
+    }
+    icon.name = 'heart-outline'
+    errorToast.dismiss()
+  } catch (error) {
+    errorToast.message = String(error)
+    errorToast.present()
+  }
+}
+
+async function getBookmarks () {
   let res = await fetch(`${baseUrl}/bookmarks`, {
     headers: { Authorization: `Bearer ${token}` },
   })
-  let json = await res json()
+  let json = await res.json()
   if (json.error) {
     throw json.error
   }
