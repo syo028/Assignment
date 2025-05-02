@@ -192,6 +192,11 @@ body {
     margin: 1rem 0;
   }
   
+  .centered-title {
+    text-align: center;
+    flex: 1; /* This allows the title to take up available space */
+}
+
   [hidden] {
     display: none;
   }

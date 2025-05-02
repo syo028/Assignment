@@ -172,12 +172,15 @@
       <ion-modal id="loginModal">
         <ion-header>
           <ion-toolbar color="primary">
-            <ion-title position="text-align" >登入</ion-title>
-            <ion-buttons slot="start">
-              <ion-button id="closeLoginModal" color="dark"> Close </ion-button>
-            </ion-buttons>
+              <ion-buttons slot="start">
+                  <ion-button id="closeLoginModal" color="dark">
+                      <ion-icon name="close-outline"></ion-icon>
+                  </ion-button>
+              </ion-buttons>
+              <ion-title class="centered-title">登入</ion-title>
+              <ion-buttons slot="end"></ion-buttons>
           </ion-toolbar>
-        </ion-header>
+      </ion-header>
         <ion-content>
           <ion-list>
             <ion-input
