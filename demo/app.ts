@@ -12,6 +12,9 @@ let baseUrl = 'https://dae-mobile-assignment.hkit.cc/api'
 declare var refreshButton: IonButton
 refreshButton?.addEventListener('click', loadItems)
 
+declare var logoutButton: IonButton
+logoutButton?.addEventListener('click', logout)
+
 declare var loginModal: IonModal
 declare var errorToast: IonToast
 
@@ -48,6 +51,9 @@ async function loadItems() {
     courseList.appendChild(skeletonItem.cloneNode(true))
     courseList.appendChild(skeletonItem.cloneNode(true))
     courseList.appendChild(skeletonItem.cloneNode(true))
+    if (logoutButton) {
+      logoutButton.hidden = !token
+  }
     let params = new URLSearchParams()
     params.set('page', page.toString())
 let res = await fetch(`${baseUrl}/courses?${params}`, {
@@ -170,7 +176,11 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 loadItems()
 
-
+async function logout() {
+  localStorage.removeItem('token')
+  token = null
+  await loadItems()
+}
 declare var usernameInput: HTMLInputElement
 declare var passwordInput: HTMLInputElement
 declare var loginButton: HTMLIonButtonElement
