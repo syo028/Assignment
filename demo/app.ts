@@ -157,10 +157,15 @@ for(let tag of item.tags){
 }
 document.addEventListener('DOMContentLoaded', () => {
   const loginButton = document.getElementById('headerLoginButton');
+  const closeButton = document.getElementById('closeLoginModal');
   const loginModal = document.querySelector('ion-modal#loginModal');
 
   loginButton?.addEventListener('click', () => {
     loginModal?.present();
+  });
+  
+  closeButton?.addEventListener('click', () => {
+    loginModal?.dismiss();
   });
 });
 loadItems()
