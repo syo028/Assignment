@@ -193,3 +193,45 @@ async function handleAuth(mode: 'signup' | 'login') {
   // TODO load bookmarks
 }
 
+//Bookmarks Function
+export async function bookmarkItem (item_id: number,icon:HTMLIonIconElement
+  try{
+    //TODO call API
+  let res = await fetch(`${baseUrl}/bookmarks/${item_id}`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}` },
+  })
+  let json = await res.json()
+  if (json.error) {
+    throw json.error
+  }
+  icon.name = 'heart'
+} catch (error) {
+  errorToast.message = String(error)
+  errorToast.present()
+}
+  try {
+   //TODO call API
+   throw 'TODO:call server API'
+} catch (error) {
+  errorToast.message = String(error)
+  errorToast.present()
+}
+export async function unbookmarkItem (item_id: number) {
+  try {
+    //TODO call API
+    throw 'TODO:call server API'
+ } catch (error) {
+   errorToast.message = String(error)
+   errorToast.present()
+ }
+ }
+export async function getBookmarks () {
+  try {
+    //TODO call API
+    throw 'TODO:call server API'
+ } catch (error) {
+   errorToast.message = String(error)
+   errorToast.present()
+ }
+ }
