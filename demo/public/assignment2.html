@@ -182,33 +182,20 @@
           </ion-toolbar>
       </ion-header>
         <ion-content>
-            <ion-list>
-              <form id="loginForm" action="/login" method="post">
-
-              <ion-item>
-                <ion-input
-                  id="usernameInput"
-                  name="username"
-                  type="text"
-                  label="帳號"
-                  required
-                ></ion-input>
-              </ion-item>
-              </form>
-              <form id="loginForm" action="/register" method="post">
-              <ion-item>
-                <ion-input
-                  id="passwordInput"
-                  name="password"
-                  type="password"
-                  label="密碼"
-                  required
-                ></ion-input>
-              </ion-item>
-              <ion-button expand="block" type="submit">登入</ion-button>
-              <ion-button expand="block" id="registerButton">註冊</ion-button>
-            </ion-list>
-          </form>
+          <ion-list>
+            <ion-input
+              id="usernameInput"
+              type="text"
+              label="帳號"
+            ></ion-input>
+            <ion-input
+              id="passwordInput"
+              type="password"
+              label="密碼"
+            ></ion-input>
+            <ion-button expand="block" id="loginButton">登入</ion-button>
+            <ion-button expand="block" id="registerButton">註冊</ion-button>
+          </ion-list>
         </ion-content>
       </ion-modal>
       
