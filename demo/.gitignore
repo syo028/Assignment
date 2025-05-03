@@ -2,3 +2,13 @@ bundle.js
 pnpm-lock.yaml
 node_modules
 package-lock.json
+*.tgz
+dist
+.env
+.env.*
+!.env.example
+*.sqlite3
+*.sqlite3-shm
+*.sqlite3-wal
+dump.sql
+*.xz
