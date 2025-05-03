@@ -53,14 +53,23 @@ async function loadItems() {
 let res = await fetch(`${baseUrl}/courses?${params}`, {
     method:'GET',
     headers:{
-        'Authorization':`Bearer ${token}`    }
+        'Authorization':`Bearer ${token}`
+    }
 })
+
+if (res.status === 401) {
+    localStorage.removeItem('token');
+    errorToast.message = '登入已过期，请重新登入';
+    errorToast.present();
+    headerLoginButton.click();
+    return;
+}
 let json = await res.json() as Result
-if (json.error) {
-errorToast.message = json.error
-errorToast.present()
-courseList.textContent = ''
-return
+if (json.error || res.status >= 400) {
+    errorToast.message = json.error || `请求失败 (${res.status})`;
+    errorToast.present();
+    courseList.textContent = '';
+    return;
 }
 errorToast.dismiss()
 
