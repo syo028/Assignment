@@ -112,26 +112,18 @@ favoriteIcon.name = bookmarkedItemIds.includes(item.id)
 favoriteButton.addEventListener('click', async() => {
 
   if (!token) {
-    errorToast.setAttribute('message','請先登入以使用收藏功能')
-    // @ts-ignore - Using Ionic methods
+    errorToast.message='請先登入以使用收藏功能'
     errorToast.present?.()
     return
   }
-try {
-  if (favoriteIcon.name === 'heart') {
-    // Item is already bookmarked, remove it
-    await unBookmarkItem(item.id, favoriteIcon)
-  } else {
-    // Item is not bookmarked, add it
+  try {
     await bookmarkItem(item.id)
-    favoriteIcon.name = 'heart'
+    favoriteIcon.name = 'star'
     errorToast.dismiss()
+  } catch (error) {
+    errorToast.message = String(error)
+    errorToast.present()
   }
-} catch (error) {
-  errorToast.message = String(error)
-  errorToast.present()
-}
-
 })
 
   card.querySelector('.course-title')!.textContent = item.title
