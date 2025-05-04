@@ -1,4 +1,3 @@
-
 import { IonButton } from '@ionic/core/components/ion-button'
 import { IonToast } from '@ionic/core/components/ion-toast'
 import { IonList } from '@ionic/core/components/ion-list'
@@ -110,15 +109,18 @@ let favoriteIcon = favoriteButton.querySelector('ion-icon')!
 favoriteIcon.name = bookmarkedItemIds.includes(item.id)
  ? 'heart' : 'heart-outline'
 favoriteButton.addEventListener('click', async() => {
-
   if (!token) {
     errorToast.message='請先登入以使用收藏功能'
     errorToast.present?.()
     return
   }
   try {
-    await bookmarkItem(item.id)
-    favoriteIcon.name = 'heart'
+    if (bookmarkedItemIds.includes(item.id)) {
+      await unBookmarkItem(item.id, favoriteIcon)
+    } else {
+      await bookmarkItem(item.id)
+      favoriteIcon.name = 'heart'
+    }
     errorToast.dismiss()
   } catch (error) {
     errorToast.message = String(error)
@@ -231,8 +233,11 @@ async function unBookmarkItem(item_id: number, icon: HTMLIonIconElement) {
 }
 
 async function getBookmarks () {
+  if (!token) {
+    return[]
+  }
   let res = await fetch(`${baseUrl}/bookmarks`, {
-    headers: { Authorization: `Bearer ${token}` },
+     headers: { Authorization: `Bearer ${token}` },
   })
   let json = await res.json()
   if (json.error) {
