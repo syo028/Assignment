@@ -118,7 +118,7 @@ favoriteButton.addEventListener('click', async() => {
   }
   try {
     await bookmarkItem(item.id)
-    favoriteIcon.name = 'star'
+    favoriteIcon.name = 'heart'
     errorToast.dismiss()
   } catch (error) {
     errorToast.message = String(error)

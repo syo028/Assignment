@@ -36,7 +36,51 @@
             <ion-icon name="person-outline" slot="icon-only"></ion-icon>
           </ion-button>
         </ion-buttons>
-      
+        <ion-buttons slot="end" id="logoutButtonContainer" style="display: none;">
+          <ion-button id="logoutButton">
+            <ion-icon name="log-out-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <script>
+          document.addEventListener('DOMContentLoaded', () => {
+            const logoutButtonContainer = document.getElementById('logoutButtonContainer');
+            const headerLoginButton = document.getElementById('headerLoginButton');
+            const logoutButton = document.getElementById('logoutButton');
+            
+            // Check if user is logged in
+            function updateLoginStatus() {
+              const token = localStorage.getItem('token');
+              if (token) {
+                // User is logged in, show logout button and hide login button
+                logoutButtonContainer.style.display = 'flex';
+                headerLoginButton.style.display = 'none';
+              } else {
+                // User is not logged in, hide logout button and show login button
+                logoutButtonContainer.style.display = 'none';
+                headerLoginButton.style.display = 'flex';
+              }
+            }
+            
+            // Add logout functionality
+            logoutButton.addEventListener('click', () => {
+              localStorage.removeItem('token');
+              updateLoginStatus();
+              // Reload items to reflect logged out state
+              if (typeof loadItems === 'function') {
+                loadItems();
+              }
+            });
+            
+            // Check login status on page load
+            updateLoginStatus();
+            
+            // Also check login status when login modal is dismissed
+            const loginModal = document.querySelector('ion-modal#loginModal');
+            if (loginModal) {
+              loginModal.addEventListener('ionModalDidDismiss', updateLoginStatus);
+            }
+          });
+        </script>
         
       </ion-toolbar>
 
