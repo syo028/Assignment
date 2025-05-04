@@ -64,6 +64,10 @@
             // Add logout functionality
             logoutButton.addEventListener('click', () => {
               localStorage.removeItem('token');
+              // Remove favorite icons by resetting to heart-outline
+              document.querySelectorAll('ion-icon[name="heart"]').forEach(icon => {
+                icon.setAttribute('name', 'heart-outline');
+              });
               updateLoginStatus();
               // Reload items to reflect logged out state
               if (typeof loadItems === 'function') {
