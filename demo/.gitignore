@@ -12,3 +12,14 @@ dist
 *.sqlite3-wal
 dump.sql
 *.xz
+migrations
+proxy.ts
+erd.txt
+knexfile.ts
+knex.ts
+erd.txt
+db.sqlite3
+db.sqlite3-shm
+db.sqlite3-wal
+db.ts
+server.ts
